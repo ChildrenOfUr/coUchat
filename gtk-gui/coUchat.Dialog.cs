@@ -14,6 +14,7 @@ namespace coUchat
 			// Widget coUchat.Dialog
 			this.Name = "coUchat.Dialog";
 			this.Title = global::Mono.Unix.Catalog.GetString("Message from CoU Chat");
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource("coUchat.img.icon_48.png");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.Modal = true;
 			this.BorderWidth = ((uint)(12));

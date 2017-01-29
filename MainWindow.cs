@@ -3,6 +3,8 @@ using coUchat;
 using Gtk;
 
 public partial class MainWindow : Gtk.Window {
+	private string LastStreet = "";
+
 	public MainWindow() : base (Gtk.WindowType.Toplevel) {
 		#pragma warning disable RECS0021 // Warns about calls to virtual member functions occuring in the constructor
 		Build();
@@ -11,21 +13,13 @@ public partial class MainWindow : Gtk.Window {
 		UsernameEntry.Text = Storage.Username;
 	}
 
-	public string Username {
+	public Message Fields {
 		get {
-			return UsernameEntry.Text.Trim();
-		}
-	}
-
-	public string Channel {
-		get {
-			return ChannelSelect.ActiveText.Trim();
-		}
-	}
-
-	public string Message {
-		get {
-			return MessageEntry.Text.Trim();
+			return new Message {
+				Channel = ChannelSelect.ActiveText.Trim(),
+				Username = UsernameEntry.Text.Trim(),
+				Text = MessageEntry.Text.Trim()
+			};
 		}
 	}
 
@@ -43,14 +37,21 @@ public partial class MainWindow : Gtk.Window {
 		}
 	}
 
-	public void PushMessage(string message, string username = "") {
-		Console.WriteLine("[{0}] {1}", username, message); 
-		if (username.Length == 0) {
-			ConvoView.Buffer.Text += $"\n\n{message}\n\n";
-		} else {
-			ConvoView.Buffer.Text += $"\n[{username}] {message}\n\n";
+	public void PushMessage(Message message) {
+		try {
+			ConvoView.Buffer.Text += message.ToString() + "\n\n";
+		} catch {
+			MainClass.Dialog.Open("Invalid character in message");
 		}
 		ConvoView.ScrollToIter(ConvoView.Buffer.EndIter, 0, false, 0, 0);
+	}
+
+	public void ListUsers(string[] users) {
+		UserList.Buffer.Text = "";
+
+		foreach (string user in users) {
+			UserList.Buffer.Text += user.Trim() + "\n";
+		}
 	}
 
 	public void Status(string status = "") {
@@ -72,21 +73,40 @@ public partial class MainWindow : Gtk.Window {
 	}
 
 	protected void SendClicked(object sender, EventArgs e) {
+		Message sending = Fields;
+
 		if (Server.Connected) {
-			Server.Send(Channel, Username, Message);
+			if (sending.Channel.Length == 0) {
+				MainClass.Dialog.Open("Please select a channel.");
+			} else if (sending.Username.Length == 0) {
+				MainClass.Dialog.Open("Please enter a username.");
+			} else if (sending.Text.Length == 0) {
+				MainClass.Dialog.Open("You can't send a blank message.");
+			} else {
+				MessageEntry.Text = "";
+				Server.Send(sending);
+			}
 		} else {
 			Server.Connect();
 		}
-	}
-
-	protected void ChannelChanged(object sender, EventArgs e) {
-		Storage.LogChat(ChannelSelect.ActiveText, ConvoView.Buffer.Text);
-		ConvoView.Buffer.Text = "";
 	}
 
 	protected void OnMessageEntryKeyReleaseEvent(object o, KeyReleaseEventArgs args) {
 		if (args.Event.Key == (Gdk.Key.Return)) {
 			SendClicked(o, args);
 		}
+	}
+
+	protected void OnChannelSelectChanged(object sender, EventArgs e) {
+		Server.Send(new Message(Fields) {
+			Command = "changeStreet",
+			OldStreet = LastStreet,
+			NewStreet = Fields.Channel
+		});
+
+		LastStreet = Fields.Channel;
+
+        Storage.LogChat(Fields.Channel, ConvoView.Buffer.Text);
+        ConvoView.Buffer.Text = "";
 	}
 }

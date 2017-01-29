@@ -1,5 +1,4 @@
-﻿using System;
-using Gtk;
+﻿using Gtk;
 
 namespace coUchat {
 	class MainClass {
@@ -14,7 +13,7 @@ namespace coUchat {
 
 			Window.PopulateStreetList();
 
-			Application.Run();
+            Application.Run();
 		}
 	}
 }

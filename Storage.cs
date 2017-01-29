@@ -9,44 +9,68 @@ namespace coUchat {
 
 		public static string[] LocalChats {
 			get {
-				if (File.Exists(LocalChatFile) && // File exists and is less than a week old
-				    File.GetLastWriteTime(LocalChatFile).AddDays(7).Subtract(DateTime.Now).TotalDays > 0
-				   ) {
-					return File.ReadAllLines(LocalChatFile);
-				} else {
-					return null;
-				}
+                try {
+                    if (File.Exists(LocalChatFile) && // File exists and is less than a week old
+                        File.GetLastWriteTime(LocalChatFile).AddDays(7).Subtract(DateTime.Now).TotalDays > 0
+                       ) {
+                        return File.ReadAllLines(LocalChatFile);
+                    } else {
+                        return null;
+                    }
+                } catch (Exception ex) {
+                    MainClass.Dialog.Open($"Error reading Local Chat cache:\n\n{ex.Message}");
+                    return null;
+                }
 			}
 
 			set {
-				File.WriteAllLines(LocalChatFile, value);
+                try {
+                    File.WriteAllLines(LocalChatFile, value);
+                } catch (Exception ex) {
+                    MainClass.Dialog.Open($"Error saving Local Chat cache:\n\n{ex.Message}");
+                }
 			}
 		}
 
 		public static string Username {
 			get {
-				if (File.Exists(UsernameFile)) {
-					return File.ReadAllText(UsernameFile);
-				} else {
-					return $"Remote {new Random().Next()}";
-				}
+                try {
+                    if (File.Exists(UsernameFile)) {
+                        return File.ReadAllText(UsernameFile);
+                    } else {
+                        return $"Remote {new Random().Next()}";
+                    }
+                } catch (Exception ex) {
+                    MainClass.Dialog.Open($"Error reading username:\n\n{ex.Message}");
+                    return $"Remote {new Random().Next()}";
+                }
 			}
 
 			set {
-				File.WriteAllText(UsernameFile, value);
+                try {
+                    File.WriteAllText(UsernameFile, value);
+                } catch (Exception ex) {
+                    MainClass.Dialog.Open($"Error saving username:\n\n{ex.Message}");
+                }
 			}
 		}
 
 		public static void LogChat(string channel, string messages) {
-			string file = Path.Combine(ChatFolder, channel) + ".log";
+            try {
+                string file = Path.Combine(ChatFolder, channel) + ".log";
 
-			messages = "\n" + DateTime.Now + "\n\n" + messages;
+                messages = "\n" + DateTime.Now + "\n\n" + messages;
 
-			if (File.Exists(file)) {
-				messages = File.ReadAllText(file) + messages;
-			}
+                if (!Directory.Exists(ChatFolder)) {
+                    Directory.CreateDirectory(ChatFolder);
+                } else if (File.Exists(file)) {
+                    messages = File.ReadAllText(file) + messages;
+                }
 
-			File.WriteAllText(file, messages);
+                File.WriteAllText(file, messages);
+            } catch (Exception ex) {
+                MainClass.Dialog.Open($"Error saving chat log:\n\n{ex.Message}");
+            }
 		}
 	}
 }

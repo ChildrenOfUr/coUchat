@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WebSocketSharp;
 
 namespace coUchat {
 	public static class Server {
-		public const string Host = "localhost";
+		#if DEBUG
+			public const string Host = "localhost";
+		#else
+			public const string Host = "robertmcdermot.com";
+		#endif
+
 		public const string StreetsUrl = "http://" + Host + ":8181/listStreets";
 		public const string ChatUrl = Host + ":8282/chat";
 
@@ -35,13 +38,15 @@ namespace coUchat {
 
 			Socket.OnMessage += (sender, e) => {
 				try {
-					JObject message = (JObject) JsonConvert.DeserializeObject(e.Data);
-					if ((string) message["statusMessage"] == "ping") {
-						Socket.Send("{\"statusMessage\": \"pong\"}");
-					} else if ((string) message["statusMessage"] == "list") {
-						MainClass.Window.PushMessage(e.Data);
+					Message message = JsonConvert.DeserializeAnonymousType(e.Data, new Message());
+
+					if (message.Command == "ping") {
+						SendCommand("pong");
+						SendCommand("list");
+					} else if (message.Command == "list") {
+						MainClass.Window.ListUsers(message.UserList);
 					} else {
-						MainClass.Window.PushMessage(e.Data);
+						MainClass.Window.PushMessage(message);
 					}
 				} catch (Exception ex) {
 					MainClass.Dialog.Open($"Error parsing server response:\n{e.Data}\n\n{ex.Message}");
@@ -53,17 +58,13 @@ namespace coUchat {
 				Thread.Sleep(500);
 				MainClass.Window.Status();
 
-				Socket.Send(JsonConvert.SerializeObject(new Dictionary<string, string>() {
-					{"channel", MainClass.Window.Channel},
-					{"street", MainClass.Window.Channel},
-					{"username", MainClass.Window.Username},
-					{"statusMessage", "list"}
-				}));
+				SendCommand("join");
+				SendCommand("list");
 			};
 
 			Socket.OnClose += (sender, e) => {
 				MainClass.Dialog.Open($"The connection to the server was lost:\n{Socket.Url}\n\n{e.Code}: {e.Reason}");
-				MainClass.Window.Status();
+				//MainClass.Window.Status();
 			};
 		}
 
@@ -81,23 +82,18 @@ namespace coUchat {
 			}
 		}
 
-		public static void Send(string channel, string username, string message) {
-			if (channel.Length == 0) {
-				MainClass.Dialog.Open("Please select a channel.");
-			} else if (username.Length == 0) {
-				MainClass.Dialog.Open("Please enter a username.");
-			} else if (message.Length == 0) {
-				MainClass.Dialog.Open("You can't send a blank message.");
-			} else {
-				Socket.Send(JsonConvert.SerializeObject(new Dictionary<string, string> () {
-					{"username", username},
-					{"channel", channel},
-					{"street", channel},
-					{"message", message}
-				}));
+		public static void Send(Message message) {
+			string json = JsonConvert.SerializeObject(message);
 
-				MainClass.Window.PushMessage(message, username);
-			}
+            if (json == null) {
+                return;
+            }
+
+			Socket.Send(json);
+		}
+
+		public static void SendCommand(string command) {
+			Send(new Message(MainClass.Window.Fields) { Command = command });
 		}
 	}
 }

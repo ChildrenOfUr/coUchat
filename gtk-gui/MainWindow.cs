@@ -7,9 +7,15 @@ public partial class MainWindow
 
 	private global::Gtk.ComboBoxEntry ChannelSelect;
 
-	private global::Gtk.ScrolledWindow ConvoScroll;
+	private global::Gtk.HBox TopBox;
+
+	private global::Gtk.ScrolledWindow GtkScrolledWindow;
 
 	private global::Gtk.TextView ConvoView;
+
+	private global::Gtk.ScrolledWindow ListScroll;
+
+	private global::Gtk.TextView UserList;
 
 	private global::Gtk.HBox BottomBox;
 
@@ -25,6 +31,7 @@ public partial class MainWindow
 		// Widget MainWindow
 		this.Name = "MainWindow";
 		this.Title = global::Mono.Unix.Catalog.GetString("CoU Chat");
+		this.Icon = global::Gdk.Pixbuf.LoadFromResource("coUchat.img.icon_48.png");
 		this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 		this.BorderWidth = ((uint)(12));
 		this.DefaultWidth = 640;
@@ -44,19 +51,45 @@ public partial class MainWindow
 		w1.Expand = false;
 		w1.Fill = false;
 		// Container child WindowBox.Gtk.Box+BoxChild
-		this.ConvoScroll = new global::Gtk.ScrolledWindow();
-		this.ConvoScroll.Name = "ConvoScroll";
-		this.ConvoScroll.ShadowType = ((global::Gtk.ShadowType)(1));
-		// Container child ConvoScroll.Gtk.Container+ContainerChild
+		this.TopBox = new global::Gtk.HBox();
+		this.TopBox.Name = "TopBox";
+		this.TopBox.Spacing = 6;
+		// Container child TopBox.Gtk.Box+BoxChild
+		this.GtkScrolledWindow = new global::Gtk.ScrolledWindow();
+		this.GtkScrolledWindow.Name = "GtkScrolledWindow";
+		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 		this.ConvoView = new global::Gtk.TextView();
 		this.ConvoView.CanFocus = true;
 		this.ConvoView.Name = "ConvoView";
 		this.ConvoView.Editable = false;
 		this.ConvoView.CursorVisible = false;
-		this.ConvoScroll.Add(this.ConvoView);
-		this.WindowBox.Add(this.ConvoScroll);
-		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.WindowBox[this.ConvoScroll]));
-		w3.Position = 1;
+		this.ConvoView.WrapMode = ((global::Gtk.WrapMode)(2));
+		this.ConvoView.LeftMargin = 12;
+		this.ConvoView.RightMargin = 12;
+		this.GtkScrolledWindow.Add(this.ConvoView);
+		this.TopBox.Add(this.GtkScrolledWindow);
+		global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.TopBox[this.GtkScrolledWindow]));
+		w3.Position = 0;
+		// Container child TopBox.Gtk.Box+BoxChild
+		this.ListScroll = new global::Gtk.ScrolledWindow();
+		this.ListScroll.Name = "ListScroll";
+		this.ListScroll.HscrollbarPolicy = ((global::Gtk.PolicyType)(2));
+		this.ListScroll.ShadowType = ((global::Gtk.ShadowType)(1));
+		// Container child ListScroll.Gtk.Container+ContainerChild
+		this.UserList = new global::Gtk.TextView();
+		this.UserList.CanFocus = true;
+		this.UserList.Name = "UserList";
+		this.UserList.Editable = false;
+		this.UserList.CursorVisible = false;
+		this.ListScroll.Add(this.UserList);
+		this.TopBox.Add(this.ListScroll);
+		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.TopBox[this.ListScroll]));
+		w5.Position = 1;
+		w5.Expand = false;
+		this.WindowBox.Add(this.TopBox);
+		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.WindowBox[this.TopBox]));
+		w6.Position = 1;
 		// Container child WindowBox.Gtk.Box+BoxChild
 		this.BottomBox = new global::Gtk.HBox();
 		this.BottomBox.Name = "BottomBox";
@@ -70,9 +103,9 @@ public partial class MainWindow
 		this.UsernameEntry.MaxLength = 50;
 		this.UsernameEntry.InvisibleChar = '●';
 		this.BottomBox.Add(this.UsernameEntry);
-		global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.BottomBox[this.UsernameEntry]));
-		w4.Position = 0;
-		w4.Expand = false;
+		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.BottomBox[this.UsernameEntry]));
+		w7.Position = 0;
+		w7.Expand = false;
 		// Container child BottomBox.Gtk.Box+BoxChild
 		this.MessageEntry = new global::Gtk.Entry();
 		this.MessageEntry.Sensitive = false;
@@ -82,24 +115,27 @@ public partial class MainWindow
 		this.MessageEntry.MaxLength = 1000;
 		this.MessageEntry.InvisibleChar = '●';
 		this.BottomBox.Add(this.MessageEntry);
-		global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.BottomBox[this.MessageEntry]));
-		w5.Position = 1;
+		global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.BottomBox[this.MessageEntry]));
+		w8.Position = 1;
 		// Container child BottomBox.Gtk.Box+BoxChild
 		this.SendButton = new global::Gtk.Button();
 		this.SendButton.CanFocus = true;
 		this.SendButton.Name = "SendButton";
 		this.SendButton.UseUnderline = true;
 		this.SendButton.Label = global::Mono.Unix.Catalog.GetString("Connect");
+		global::Gtk.Image w9 = new global::Gtk.Image();
+		w9.Pixbuf = global::Stetic.IconLoader.LoadIcon(this, "gtk-ok", global::Gtk.IconSize.Menu);
+		this.SendButton.Image = w9;
 		this.BottomBox.Add(this.SendButton);
-		global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.BottomBox[this.SendButton]));
-		w6.Position = 2;
-		w6.Expand = false;
-		w6.Fill = false;
+		global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.BottomBox[this.SendButton]));
+		w10.Position = 2;
+		w10.Expand = false;
+		w10.Fill = false;
 		this.WindowBox.Add(this.BottomBox);
-		global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.WindowBox[this.BottomBox]));
-		w7.Position = 2;
-		w7.Expand = false;
-		w7.Fill = false;
+		global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.WindowBox[this.BottomBox]));
+		w11.Position = 2;
+		w11.Expand = false;
+		w11.Fill = false;
 		this.Add(this.WindowBox);
 		if ((this.Child != null))
 		{
@@ -107,6 +143,7 @@ public partial class MainWindow
 		}
 		this.Show();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler(this.OnDeleteEvent);
+		this.ChannelSelect.Changed += new global::System.EventHandler(this.OnChannelSelectChanged);
 		this.MessageEntry.KeyReleaseEvent += new global::Gtk.KeyReleaseEventHandler(this.OnMessageEntryKeyReleaseEvent);
 		this.SendButton.Clicked += new global::System.EventHandler(this.SendClicked);
 	}
