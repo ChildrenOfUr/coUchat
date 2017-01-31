@@ -3,9 +3,9 @@
 namespace coUchat {
 	[JsonObject(MemberSerialization.OptIn)]
 	public struct Message {
-        [JsonProperty("exempt")]
-        public const bool Exempt = true;
-        
+		[JsonProperty("exempt")]
+		public const bool Exempt = true;
+
 		[JsonProperty("statusMessage", NullValueHandling = NullValueHandling.Ignore)]
 		public string Command;
 
@@ -44,11 +44,7 @@ namespace coUchat {
 		}
 
 		public override string ToString() {
-			if (Username == null || Username.Length == 0) {
-				return Text;
-			} else {
-				return string.Format("{0, -50}{1}", Username, Text);
-			}
+			return string.Format("{0, -50}{1}", Username, Text);
 		}
 	}
 }
