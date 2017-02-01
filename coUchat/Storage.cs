@@ -3,40 +3,11 @@ using System.IO;
 
 namespace coUchat {
 	public static class Storage {
-		private const string UsernameFile = "username.txt";
-		private const string LocalChatFile = "channels.list";
-		private const string ChatFolder = "channels";
-
-		public static string[] LocalChats {
-			get {
-				try {
-					if (File.Exists(LocalChatFile) && // File exists and is less than a week old
-						File.GetLastWriteTime(LocalChatFile).AddDays(7).Subtract(DateTime.Now).TotalDays > 0
-					   ) {
-						return File.ReadAllLines(LocalChatFile);
-					} else {
-						return null;
-					}
-				} catch (Exception ex) {
-					Program.UI.UpdateStatus($"Error reading Local Chat cache:\n\n{ex.Message}");
-					return null;
-				}
-			}
-
-			set {
-				try {
-					File.WriteAllLines(LocalChatFile, value);
-				} catch (Exception ex) {
-					Program.UI.UpdateStatus($"Error saving Local Chat cache:\n\n{ex.Message}");
-				}
-			}
-		}
-
 		public static string Username {
 			get {
 				try {
-					if (File.Exists(UsernameFile)) {
-						return File.ReadAllText(UsernameFile);
+					if (File.Exists(Properties.Resources.UsernameFile)) {
+						return File.ReadAllText(Properties.Resources.UsernameFile);
 					} else {
 						return $"Remote {new Random().Next()}";
 					}
@@ -48,7 +19,7 @@ namespace coUchat {
 
 			set {
 				try {
-					File.WriteAllText(UsernameFile, value);
+					File.WriteAllText(Properties.Resources.UsernameFile, value);
 				} catch (Exception ex) {
 					Program.UI.UpdateStatus($"Error saving username:\n\n{ex.Message}");
 				}
@@ -57,12 +28,12 @@ namespace coUchat {
 
 		public static void LogChat(string channel, string messages) {
 			try {
-				string file = Path.Combine(ChatFolder, channel) + ".log";
+				string file = Path.Combine(Properties.Resources.ChannelFolder, channel) + ".log";
 
 				messages = "\n" + DateTime.Now + "\n\n" + messages;
 
-				if (!Directory.Exists(ChatFolder)) {
-					Directory.CreateDirectory(ChatFolder);
+				if (!Directory.Exists(Properties.Resources.ChannelFolder)) {
+					Directory.CreateDirectory(Properties.Resources.ChannelFolder);
 				} else if (File.Exists(file)) {
 					messages = File.ReadAllText(file) + messages;
 				}

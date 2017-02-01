@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
 			this.UsernameEntry = new System.Windows.Forms.TextBox();
 			this.ConnectBtn = new System.Windows.Forms.Button();
 			this.ServerLive = new System.Windows.Forms.RadioButton();
@@ -31,7 +32,7 @@
 			this.ServerOpts = new System.Windows.Forms.GroupBox();
 			this.ChannelList = new System.Windows.Forms.ListBox();
 			this.StatusBar = new System.Windows.Forms.StatusStrip();
-			this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this.StatusText = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ChatButton = new System.Windows.Forms.Button();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.ServerOpts.SuspendLayout();
@@ -44,19 +45,20 @@
 			// 
 			// UsernameEntry
 			// 
+			this.UsernameEntry.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.UsernameEntry.Location = new System.Drawing.Point(3, 59);
 			this.UsernameEntry.MaxLength = 50;
 			this.UsernameEntry.Name = "UsernameEntry";
-			this.UsernameEntry.Size = new System.Drawing.Size(152, 20);
+			this.UsernameEntry.Size = new System.Drawing.Size(152, 25);
 			this.UsernameEntry.TabIndex = 4;
 			this.UsernameEntry.Text = "Username";
 			this.UsernameEntry.TextChanged += new System.EventHandler(this.UsernameEntry_TextChanged);
 			// 
 			// ConnectBtn
 			// 
-			this.ConnectBtn.Location = new System.Drawing.Point(161, 57);
+			this.ConnectBtn.Location = new System.Drawing.Point(161, 59);
 			this.ConnectBtn.Name = "ConnectBtn";
-			this.ConnectBtn.Size = new System.Drawing.Size(120, 23);
+			this.ConnectBtn.Size = new System.Drawing.Size(120, 25);
 			this.ConnectBtn.TabIndex = 5;
 			this.ConnectBtn.Text = "Connect";
 			this.ConnectBtn.UseVisualStyleBackColor = true;
@@ -123,19 +125,18 @@
 			// StatusBar
 			// 
 			this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StatusLabel});
+            this.StatusText});
 			this.StatusBar.Location = new System.Drawing.Point(0, 239);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Size = new System.Drawing.Size(284, 22);
 			this.StatusBar.SizingGrip = false;
 			this.StatusBar.TabIndex = 7;
-			this.StatusBar.Text = "statusStrip1";
 			// 
-			// StatusLabel
+			// StatusText
 			// 
-			this.StatusLabel.Name = "StatusLabel";
-			this.StatusLabel.Size = new System.Drawing.Size(39, 17);
-			this.StatusLabel.Text = "Ready";
+			this.StatusText.Name = "StatusText";
+			this.StatusText.Size = new System.Drawing.Size(39, 17);
+			this.StatusText.Text = "Status";
 			// 
 			// ChatButton
 			// 
@@ -179,6 +180,7 @@
 			this.ClientSize = new System.Drawing.Size(284, 261);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.StatusBar);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MaximumSize = new System.Drawing.Size(300, 800);
 			this.MinimumSize = new System.Drawing.Size(300, 300);
@@ -209,9 +211,9 @@
         private System.Windows.Forms.GroupBox ServerOpts;
         private System.Windows.Forms.ListBox ChannelList;
         private System.Windows.Forms.StatusStrip StatusBar;
-        private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
 		private System.Windows.Forms.Button ChatButton;
 		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.ToolStripStatusLabel StatusText;
 	}
 }
 

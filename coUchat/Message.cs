@@ -43,8 +43,35 @@ namespace coUchat {
 			}
 		}
 
+		public string ToRtf() {
+			return @"\b " + Username + @" \b0 " + Text + @"\line \line";
+		}
+
+		public string ToTxt() {
+			string indicator = Username.Trim() == Program.UI.Username ? " << " : " >> ";
+			return Username + indicator + Text + "\n";
+		}
+
 		public override string ToString() {
-			return string.Format("{0, -50}{1}", Username, Text);
+			string result = "";
+
+			if (Channel != null) {
+				result += $"{Channel} >> ";
+			}
+
+			if (Command != null) {
+				result += $"({Command}) ";
+			}
+
+			if (Username != null) {
+				result += $"[{Username}] ";
+			}
+
+			if (Text != null) {
+				result += $"'{Text}'";
+			}
+
+			return result.Trim();
 		}
 	}
 }

@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using System.Net;
-using Newtonsoft.Json;
-using WebSocketSharp;
 
 namespace coUchat {
 	public static class Server {
@@ -28,7 +26,6 @@ namespace coUchat {
 			Stream response = WebRequest.Create(StreetsUrl).GetResponse().GetResponseStream();
 			string lines = new StreamReader(response).ReadToEnd();
 			string[] streetNames = lines.Split('\n');
-			Storage.LocalChats = streetNames;
 			return streetNames;
 		}
 	}

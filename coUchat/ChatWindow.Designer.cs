@@ -23,12 +23,13 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChatWindow));
 			this.StatusBar = new System.Windows.Forms.StatusStrip();
-			this.ConnectStatus = new System.Windows.Forms.ToolStripSplitButton();
+			this.StatusButton = new System.Windows.Forms.ToolStripSplitButton();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.UserView = new System.Windows.Forms.TreeView();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-			this.MessageView = new System.Windows.Forms.RichTextBox();
+			this.MsgView = new System.Windows.Forms.RichTextBox();
 			this.splitContainer3 = new System.Windows.Forms.SplitContainer();
 			this.MessageEntry = new System.Windows.Forms.TextBox();
 			this.SendButton = new System.Windows.Forms.Button();
@@ -50,28 +51,28 @@
 			// StatusBar
 			// 
 			this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ConnectStatus});
+            this.StatusButton});
 			this.StatusBar.Location = new System.Drawing.Point(0, 259);
 			this.StatusBar.Name = "StatusBar";
 			this.StatusBar.Size = new System.Drawing.Size(464, 22);
 			this.StatusBar.SizingGrip = false;
 			this.StatusBar.TabIndex = 0;
-			this.StatusBar.Text = "statusStrip1";
 			// 
-			// ConnectStatus
+			// StatusButton
 			// 
-			this.ConnectStatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.ConnectStatus.DropDownButtonWidth = 0;
-			this.ConnectStatus.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.ConnectStatus.Name = "ConnectStatus";
-			this.ConnectStatus.Size = new System.Drawing.Size(93, 20);
-			this.ConnectStatus.Text = "Not Connected";
-			this.ConnectStatus.ButtonClick += new System.EventHandler(this.ConnectStatus_ButtonClick);
+			this.StatusButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.StatusButton.DropDownButtonWidth = 0;
+			this.StatusButton.Image = ((System.Drawing.Image)(resources.GetObject("StatusButton.Image")));
+			this.StatusButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.StatusButton.Name = "StatusButton";
+			this.StatusButton.Size = new System.Drawing.Size(44, 20);
+			this.StatusButton.Text = "Status";
+			this.StatusButton.ButtonClick += new System.EventHandler(this.StatusButton_ButtonClick);
 			// 
 			// splitContainer1
 			// 
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.splitContainer1.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer1.Name = "splitContainer1";
 			// 
@@ -90,9 +91,8 @@
 			// 
 			// UserView
 			// 
-			this.UserView.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.UserView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.UserView.HotTracking = true;
+			this.UserView.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.UserView.Indent = 15;
 			this.UserView.ItemHeight = 24;
 			this.UserView.Location = new System.Drawing.Point(0, 0);
@@ -102,7 +102,7 @@
 			this.UserView.ShowRootLines = false;
 			this.UserView.Size = new System.Drawing.Size(150, 259);
 			this.UserView.TabIndex = 3;
-			this.UserView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.UserView_AfterSelect);
+			this.UserView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.UserView_NodeMouseDoubleClick);
 			// 
 			// splitContainer2
 			// 
@@ -115,7 +115,7 @@
 			// 
 			// splitContainer2.Panel1
 			// 
-			this.splitContainer2.Panel1.Controls.Add(this.MessageView);
+			this.splitContainer2.Panel1.Controls.Add(this.MsgView);
 			this.splitContainer2.Panel1MinSize = 100;
 			// 
 			// splitContainer2.Panel2
@@ -126,20 +126,22 @@
 			this.splitContainer2.SplitterDistance = 230;
 			this.splitContainer2.TabIndex = 0;
 			// 
-			// MessageView
+			// MsgView
 			// 
-			this.MessageView.BackColor = System.Drawing.Color.White;
-			this.MessageView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.MessageView.Location = new System.Drawing.Point(0, 0);
-			this.MessageView.Name = "MessageView";
-			this.MessageView.ReadOnly = true;
-			this.MessageView.Size = new System.Drawing.Size(310, 230);
-			this.MessageView.TabIndex = 2;
-			this.MessageView.Text = "";
+			this.MsgView.BackColor = System.Drawing.Color.White;
+			this.MsgView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MsgView.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.MsgView.Location = new System.Drawing.Point(0, 0);
+			this.MsgView.Name = "MsgView";
+			this.MsgView.ReadOnly = true;
+			this.MsgView.Size = new System.Drawing.Size(310, 230);
+			this.MsgView.TabIndex = 0;
+			this.MsgView.Text = "";
 			// 
 			// splitContainer3
 			// 
 			this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer3.IsSplitterFixed = true;
 			this.splitContainer3.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer3.Name = "splitContainer3";
@@ -159,36 +161,42 @@
 			// 
 			this.MessageEntry.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.MessageEntry.Enabled = false;
+			this.MessageEntry.Font = new System.Drawing.Font("Segoe UI", 10F);
 			this.MessageEntry.Location = new System.Drawing.Point(0, 0);
-			this.MessageEntry.MaxLength = 1000;
+			this.MessageEntry.MaxLength = 100;
 			this.MessageEntry.Name = "MessageEntry";
-			this.MessageEntry.Size = new System.Drawing.Size(251, 20);
+			this.MessageEntry.Size = new System.Drawing.Size(251, 25);
 			this.MessageEntry.TabIndex = 1;
-			this.MessageEntry.Enter += new System.EventHandler(this.MessageEntry_Enter);
-			this.MessageEntry.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MessageEntry_KeyPress);
 			// 
 			// SendButton
 			// 
 			this.SendButton.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.SendButton.Enabled = false;
 			this.SendButton.Location = new System.Drawing.Point(0, 0);
+			this.SendButton.MaximumSize = new System.Drawing.Size(55, 25);
+			this.SendButton.MinimumSize = new System.Drawing.Size(55, 25);
 			this.SendButton.Name = "SendButton";
 			this.SendButton.Size = new System.Drawing.Size(55, 25);
 			this.SendButton.TabIndex = 0;
 			this.SendButton.TabStop = false;
 			this.SendButton.Text = "Send";
 			this.SendButton.UseVisualStyleBackColor = true;
+			this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
 			// 
 			// ChatWindow
 			// 
+			this.AcceptButton = this.SendButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(464, 281);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.StatusBar);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(480, 320);
 			this.Name = "ChatWindow";
 			this.Text = "CoU Chat";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChatWindow_FormClosing);
+			this.Shown += new System.EventHandler(this.ChatWindow_Shown);
 			this.StatusBar.ResumeLayout(false);
 			this.StatusBar.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
@@ -215,10 +223,10 @@
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.TreeView UserView;
 		private System.Windows.Forms.SplitContainer splitContainer2;
-		private System.Windows.Forms.RichTextBox MessageView;
-		private System.Windows.Forms.ToolStripSplitButton ConnectStatus;
 		private System.Windows.Forms.TextBox MessageEntry;
 		private System.Windows.Forms.Button SendButton;
 		private System.Windows.Forms.SplitContainer splitContainer3;
+		private System.Windows.Forms.ToolStripSplitButton StatusButton;
+		private System.Windows.Forms.RichTextBox MsgView;
 	}
 }

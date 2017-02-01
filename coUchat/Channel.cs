@@ -18,10 +18,15 @@ namespace coUchat {
 
 			set {
 				if (value) {
+					if (!Program.UI.Connected) {
+						Program.UI.Connected = true;
+					}
+
 					try {
+						Window.UpdateStatus("Connecting...");
 						Socket.Connect();
 					} catch (Exception ex) {
-						Window.UpdateStatus($"Error connecting to street {StreetName}: {ex.Message}");
+						Window.UpdateStatus($"Couldn't connect: {ex.Message}");
 					}
 				} else {
 					try {
@@ -31,9 +36,9 @@ namespace coUchat {
 						});
 
 						Task.Run(() => Socket.Close());
-						Window.Close();
+						Window.UpdateStatus();
 					} catch (Exception ex) {
-						Window.UpdateStatus($"Error disconnecting from street {StreetName}: {ex.Message}");
+						Window.UpdateStatus($"Couldn't disconnect: {ex.Message}");
 					}
 				}
 			}
@@ -49,7 +54,6 @@ namespace coUchat {
 				Message message;
 
 				try {
-					Console.WriteLine(e.Data);
 					message = JsonConvert.DeserializeAnonymousType(e.Data, new Message());
 				} catch (Exception ex) {
 					Window.UpdateStatus($"Invalid server message ({e.Data}) {ex.Message}");
