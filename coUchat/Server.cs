@@ -17,7 +17,7 @@ namespace coUchat {
 
 		public static string ChatUrl {
 			get {
-				string protocol = Selected == Properties.Resources.ServerUrlLive ? "wss" : "ws";
+				string protocol = Selected == Properties.Resources.ServerUrlLocal ? "ws" : "wss";
 				return $"{protocol}://{Selected}:{Properties.Resources.WsPort}/chat";
 			}
 		}
