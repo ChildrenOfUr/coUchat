@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using WebSocketSharp;
 
 namespace coUchat {
-	public class Channel {
+	public class Channel : IDisposable {
 		private WebSocket Socket;
 
 		public readonly ChatWindow Window;
@@ -97,6 +97,20 @@ namespace coUchat {
 				Socket.Send(json);
 			} catch (Exception ex) {
 				Window.UpdateStatus($"Error sending message: {ex.Message}");
+			}
+		}
+
+		public void Dispose() {
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing) {
+			Connected = false;
+
+			if (disposing) {
+				Socket.Close();
+				Window.Dispose();
 			}
 		}
 	}
